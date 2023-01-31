@@ -1,3 +1,18 @@
+let playerCounter=0;
+let computerCounter=0;
+
+const txt = document.getElementById("txt");
+const playerScore = document.getElementById("playerCounter");
+const compScore = document.getElementById("computerCounter");
+const prekrij = document.querySelector("#prekrij");
+const prekrijP = document.querySelector("#prekrij-p");
+
+
+const buttons = Array.from(document.querySelectorAll(".button"));
+buttons.forEach(butt => butt.addEventListener("click",playRound));
+
+
+
 function getComputerChoice()
 {
 
@@ -9,92 +24,137 @@ function getComputerChoice()
     return random;
 }
 
-function playRound(playerSelection, computerSelection)
+function playRound(e)
 {
-    let player = playerSelection.toLowerCase();
+
     
+    let playerSelection=0;
+    if(e.target.id == "rock")
+         playerSelection = "rock";
+
+    else if(e.target.id =="paper")
+        playerSelection = "paper";
+
+    else if(e.target.id == "scissors")
+        playerSelection = "scissors";
+
+        let computerSelection = getComputerChoice();
     
 
-    if(player == computerSelection)
-            return "Its a tie!";
+    if(playerSelection == computerSelection)
+    {  txt.textContent = "Its a tie";
+            
+            
+        }
 
- 
-   if(player == "rock"){
+
+   if(playerSelection == "rock"){
    switch(computerSelection)
    {
     case "paper":
-        return "You lose!Paper beats rock";
+        txt.textContent = "You lose";
+        break;
+        
      case "scissors":
-        return "You win!Rock beats scissors";
+      txt.textContent = "You Win";
+     break;
+        
     
    }
 }
-   else if(player == "paper"){
+   else if(playerSelection == "paper"){
     switch(computerSelection)
     {
      case "rock":
-         return "You win!Paper beats rock";
+        txt.textContent = "You Win";
+        break;
       case "scissors":
-         return "You lose!Scissors beats paper";
+        txt.textContent = "You lose";
+        break;
      
     }
 }
-    else if(player == "scissors"){
+    else if(playerSelection == "scissors"){
         switch(computerSelection)
         {
          case "rock":
-             return "You lose!Rock beats scissors";
+            txt.textContent = "You lose";
+            break;
           case "paper":
-             return "You win!Scissors beats paper";
+            txt.textContent = "You Win";
+
+            break;
          
         }
     }
+    roundWinCounter();
+    gameWinner();    
+    score();    
+
+        
+            
 }
 
-
-
-let playerSelection = 0;
-let computerSelection = 0;
-
-let playerCounter=0;
-let computerCounter=0;
-
-
-
-
-
-function game()
+function score()
 {
-   
-    for(let i = 0;i<5;i++)
-    {
-        playerSelection = prompt();
-        computerSelection = getComputerChoice();
-        
-        console.log(playRound(playerSelection,computerSelection));
-        if(playRound(playerSelection,computerSelection).includes("lose"))
-            computerCounter++;
-        
-        else if(playRound(playerSelection,computerSelection).includes("win"))
-            playerCounter++;
-        console.log(`Broj tvojih pobjeda: ${playerCounter}`);
-        console.log(`Broj kompjuterovih pobjeda: ${computerCounter}`);
-        
+    playerScore.textContent = playerCounter;
+    compScore.textContent = computerCounter;
+}
 
+function roundWinCounter()
+{
+    
+    if(txt.textContent == "You Win")
+        playerCounter++;
+        if(txt.textContent == "You lose")
+        computerCounter++;
         
-      
-            
-        
+}
+function gameWinner()
+{
+
+    
+    
+    if(playerCounter == 5 && playerCounter > computerCounter)
+    {
+        prekrij.classList.add("prekrij");
+        prekrijP.classList.add("prekrij-p");
+
+        prekrijP.textContent= "You won the game!Press Enter to play again";
+        playerCounter = 0,computerCounter = 0;  
+        newGame();
         
     }
-    
-  if(playerCounter > computerCounter)
-    console.log("Pobijedili ste!"); 
-    else if(playerCounter < computerCounter)
-    console.log("Izgubili ste!");
-else if (playerCounter == computerCounter)
-    console.log("Izjednaceno");
-    
+     else if(computerCounter == 5 && computerCounter > playerCounter)
+     {
+
+        prekrij.classList.add("prekrij");
+        prekrijP.classList.add("prekrij-p");
+
+        prekrijP.textContent= "You lost the game!Press Enter to play again";
+        playerCounter = 0,computerCounter = 0;
+        newGame();
+       
+     }
+        
+
 }
 
-game();
+
+function newGame()
+{
+    window.addEventListener("keydown",(event) =>{
+        if(event.keyCode === 13)
+        {
+            prekrij.classList.remove("prekrij");
+            prekrijP.textContent= "";
+            txt.textContent = "";
+        }
+    });
+}
+
+
+
+
+
+
